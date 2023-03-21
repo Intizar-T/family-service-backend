@@ -29,7 +29,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const helmet_1 = __importDefault(require("helmet"));
 const store_router_1 = require("./store.router");
 const user_router_1 = require("./user.router");
 dotenv.config();
@@ -38,8 +37,8 @@ if (!process.env.PORT) {
 }
 const PORT = parseInt(process.env.PORT, 10) || 8001;
 const app = (0, express_1.default)();
-app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
+app.options("*", (0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/store", store_router_1.store);
 app.use("/user", user_router_1.user);

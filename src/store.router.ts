@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 import express, { Request, Response } from "express";
 
 export const store = express.Router();
@@ -22,7 +23,7 @@ interface UpdateProduct {
   isBought?: boolean;
 }
 
-store.get("/", async (req: Request, res: Response) => {
+store.get("/", cors(), async (req: Request, res: Response) => {
   try {
     const products = await dbClient.product.findMany();
     res.status(200).send(products);

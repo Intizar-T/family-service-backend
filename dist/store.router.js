@@ -5,12 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.store = void 0;
 const client_1 = require("@prisma/client");
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 exports.store = express_1.default.Router();
 const dbClient = new client_1.PrismaClient({
     datasources: { db: { url: "file:./dev.db" } },
 });
-exports.store.get("/", async (req, res) => {
+exports.store.get("/", (0, cors_1.default)(), async (req, res) => {
     try {
         const products = await dbClient.product.findMany();
         res.status(200).send(products);
