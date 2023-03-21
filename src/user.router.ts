@@ -3,7 +3,9 @@ import express, { Request, Response } from "express";
 
 export const user = express.Router();
 
-const dbClient = new PrismaClient();
+const dbClient = new PrismaClient({
+  datasources: { db: { url: "file:./dev.db" } },
+});
 
 interface User {
   name: string;

@@ -3,7 +3,9 @@ import express, { Request, Response } from "express";
 
 export const store = express.Router();
 
-const dbClient = new PrismaClient();
+const dbClient = new PrismaClient({
+  datasources: { db: { url: "file:./dev.db" } },
+});
 
 // interface GetProducts {
 //   isBought?: boolean;
