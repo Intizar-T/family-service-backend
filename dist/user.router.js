@@ -7,7 +7,9 @@ exports.user = void 0;
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 exports.user = express_1.default.Router();
-const dbClient = new client_1.PrismaClient();
+const dbClient = new client_1.PrismaClient({
+    datasources: { db: { url: "file:./dev.db" } },
+});
 exports.user.post("/", async (req, res) => {
     try {
         const user = req.body;

@@ -7,7 +7,9 @@ exports.store = void 0;
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 exports.store = express_1.default.Router();
-const dbClient = new client_1.PrismaClient();
+const dbClient = new client_1.PrismaClient({
+    datasources: { db: { url: "file:./dev.db" } },
+});
 exports.store.get("/", async (req, res) => {
     try {
         const products = await dbClient.product.findMany();
