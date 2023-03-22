@@ -15,12 +15,14 @@ const dbClient = new PrismaClient({
 interface CreateProduct {
   name: string;
   createdUserName: string;
+  amount: number;
 }
 
 interface UpdateProduct {
   name?: string;
   boughtUserName?: string;
   isBought?: boolean;
+  amount?: number;
 }
 
 store.get("/", cors(), async (req: Request, res: Response) => {
@@ -51,11 +53,12 @@ store.get("/:id", async (req: Request, res: Response) => {
 
 store.post("/", async (req: Request, res: Response) => {
   try {
-    const { createdUserName, name }: CreateProduct = req.body;
+    const { createdUserName, name, amount }: CreateProduct = req.body;
     const product = await dbClient.product.create({
       data: {
-        name: name,
-        createdUserName: createdUserName,
+        name,
+        createdUserName,
+        amount,
       },
     });
     res.status(200).send(product);
@@ -66,15 +69,16 @@ store.post("/", async (req: Request, res: Response) => {
 
 store.put("/:id", async (req: Request, res: Response) => {
   try {
-    const { boughtUserName, isBought, name }: UpdateProduct = req.body;
+    const { boughtUserName, isBought, name, amount }: UpdateProduct = req.body;
     const product = await dbClient.product.update({
       where: {
         id: Number(req.params.id),
       },
       data: {
-        name: name,
-        boughtUserName: boughtUserName,
-        isBought: isBought,
+        name,
+        boughtUserName,
+        isBought,
+        amount,
       },
     });
     res.status(200).send(product);

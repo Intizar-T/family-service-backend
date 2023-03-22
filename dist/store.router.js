@@ -39,11 +39,12 @@ exports.store.get("/:id", async (req, res) => {
 });
 exports.store.post("/", async (req, res) => {
     try {
-        const { createdUserName, name } = req.body;
+        const { createdUserName, name, amount } = req.body;
         const product = await dbClient.product.create({
             data: {
-                name: name,
-                createdUserName: createdUserName,
+                name,
+                createdUserName,
+                amount,
             },
         });
         res.status(200).send(product);
@@ -54,15 +55,16 @@ exports.store.post("/", async (req, res) => {
 });
 exports.store.put("/:id", async (req, res) => {
     try {
-        const { boughtUserName, isBought, name } = req.body;
+        const { boughtUserName, isBought, name, amount } = req.body;
         const product = await dbClient.product.update({
             where: {
                 id: Number(req.params.id),
             },
             data: {
-                name: name,
-                boughtUserName: boughtUserName,
-                isBought: isBought,
+                name,
+                boughtUserName,
+                isBought,
+                amount,
             },
         });
         res.status(200).send(product);
