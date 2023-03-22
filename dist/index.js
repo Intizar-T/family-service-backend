@@ -31,6 +31,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const store_router_1 = require("./store.router");
 const user_router_1 = require("./user.router");
+const echo_router_1 = require("./echo.router");
 dotenv.config();
 if (!process.env.PORT) {
     process.exit(1);
@@ -42,6 +43,7 @@ app.options("*", (0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/store", store_router_1.store);
 app.use("/user", user_router_1.user);
+app.use("/echo", echo_router_1.echo);
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Listening to port ${PORT}`);
 });

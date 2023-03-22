@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { store } from "./store.router";
 import { user } from "./user.router";
+import { echo } from "./echo.router";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 app.use("/store", store);
 app.use("/user", user);
+app.use("/echo", echo);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Listening to port ${PORT}`);
