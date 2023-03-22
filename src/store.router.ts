@@ -15,7 +15,7 @@ const dbClient = new PrismaClient({
 interface CreateProduct {
   name: string;
   createdUserName: string;
-  amount: number;
+  amount?: number;
 }
 
 interface UpdateProduct {
