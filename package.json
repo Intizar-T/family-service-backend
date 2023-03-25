@@ -5,12 +5,13 @@
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "build": "tsc --project ./",
     "dev": "nodemon --config nodemon.json",
     "start": "nodemon --config nodemon.json",
     "prod": "node dist/index.js",
     "db:migrate": "npx prisma migrate dev",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "build": "yarn db:generate && tsc --project ./",
+    "db:generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
