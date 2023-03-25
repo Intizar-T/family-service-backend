@@ -11,25 +11,29 @@ datasource db {
 }
 
 model User {
-  name      String      @id @unique
-  nickName  String? 
+  device              String      
+  name                String      
 
-  createdProduct   Product[]   @relation("created")
-  boughtProduct    Product[]   @relation("bought")
+  createdProduct      Product[]   @relation("created")
+  boughtProduct       Product[]   @relation("bought")
+
+  @@id([device, name])
 }
 
 model Product {
-  id          Int               @id @default(autoincrement())
-  name        String
-  isBought    Boolean           @default(false)
-  amount      Float?
+  id                  Int               @id @default(autoincrement())
+  name                String
+  isBought            Boolean           @default(false)
+  amount              Float?
 
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 
-  createdUser       User        @relation("created", fields: [createdUserName], references: [name])
-  createdUserName   String
+  createdUser         User              @relation("created", fields: [userDevice, userName], references: [device, name], onDelete: Cascade)
+  userDevice          String
+  userName            String
 
-  boughtUser        User?        @relation("bought", fields: [boughtUserName], references: [name])
-  boughtUserName    String?
+  boughtUser          User?             @relation("bought", fields: [boughtUserDevice, boughtUserName], references: [device, name])
+  boughtUserDevice    String?
+  boughtUserName      String?
 }

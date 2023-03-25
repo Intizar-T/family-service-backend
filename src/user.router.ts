@@ -8,21 +8,22 @@ const dbClient = new PrismaClient({
 });
 
 interface User {
+  device: string;
   name: string;
-  nickName?: string;
 }
 
 interface UpdateUser {
-  nickName?: string;
+  device?: string;
+  name?: string;
 }
 
 user.post("/", async (req: Request, res: Response) => {
   try {
-    const user: User = req.body;
+    const { device, name }: User = req.body;
     const newUser = await dbClient.user.create({
       data: {
-        name: user.name,
-        nickName: user.nickName,
+        device: device,
+        name: name,
       },
     });
     return res.status(200).send(newUser);
@@ -31,15 +32,23 @@ user.post("/", async (req: Request, res: Response) => {
   }
 });
 
-user.put("/:name", async (req: Request, res: Response) => {
+user.put("/:device_name", async (req: Request, res: Response) => {
   try {
-    const user: UpdateUser = req.body;
+    const { device, name }: UpdateUser = req.body;
+    const {
+      device: oldDevice,
+      name: oldName,
+    }: { device: string; name: string } = JSON.parse(req.params.device_name);
     const newUser = await dbClient.user.update({
       where: {
-        name: req.params.name,
+        device_name: {
+          device: oldDevice,
+          name: oldName,
+        },
       },
       data: {
-        nickName: user.nickName,
+        device: device,
+        name: name,
       },
     });
     return res.status(200).send(newUser);
@@ -57,12 +66,17 @@ user.get("/", async (req: Request, res: Response) => {
   }
 });
 
-user.get("/:name", async (req: Request, res: Response) => {
+user.get("/:device_name", async (req: Request, res: Response) => {
   try {
-    const name = req.params.name;
+    const { device, name }: { device: string; name: string } = JSON.parse(
+      req.params.device_name
+    );
     const user = await dbClient.user.findUnique({
       where: {
-        name: name,
+        device_name: {
+          device,
+          name,
+        },
       },
     });
     console.log(user);
@@ -72,11 +86,17 @@ user.get("/:name", async (req: Request, res: Response) => {
   }
 });
 
-user.delete("/:id", async (req: Request, res: Response) => {
+user.delete("/:device_name", async (req: Request, res: Response) => {
+  const { device, name }: { device: string; name: string } = JSON.parse(
+    req.params.device_name
+  );
   try {
     await dbClient.user.delete({
       where: {
-        name: req.params.name,
+        device_name: {
+          device,
+          name,
+        },
       },
     });
     return res.status(200).send("success");

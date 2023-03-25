@@ -14,13 +14,15 @@ const dbClient = new PrismaClient({
 
 interface CreateProduct {
   name: string;
-  createdUserName: string;
+  userDevice: string;
+  userName: string;
   amount?: number;
 }
 
 interface UpdateProduct {
   name?: string;
   boughtUserName?: string;
+  boughtUserDevice?: string;
   isBought?: boolean;
   amount?: number;
 }
@@ -53,11 +55,12 @@ store.get("/:id", async (req: Request, res: Response) => {
 
 store.post("/", async (req: Request, res: Response) => {
   try {
-    const { createdUserName, name, amount }: CreateProduct = req.body;
+    const { userDevice, userName, name, amount }: CreateProduct = req.body;
     const product = await dbClient.product.create({
       data: {
         name,
-        createdUserName,
+        userName,
+        userDevice,
         amount,
       },
     });
@@ -69,7 +72,13 @@ store.post("/", async (req: Request, res: Response) => {
 
 store.put("/:id", async (req: Request, res: Response) => {
   try {
-    const { boughtUserName, isBought, name, amount }: UpdateProduct = req.body;
+    const {
+      boughtUserName,
+      isBought,
+      name,
+      amount,
+      boughtUserDevice,
+    }: UpdateProduct = req.body;
     const product = await dbClient.product.update({
       where: {
         id: Number(req.params.id),
@@ -79,6 +88,7 @@ store.put("/:id", async (req: Request, res: Response) => {
         boughtUserName,
         isBought,
         amount,
+        boughtUserDevice,
       },
     });
     res.status(200).send(product);
