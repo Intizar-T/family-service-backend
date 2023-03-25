@@ -12,11 +12,11 @@ const dbClient = new client_1.PrismaClient({
 });
 exports.user.post("/", async (req, res) => {
     try {
-        const user = req.body;
+        const { device, name } = req.body;
         const newUser = await dbClient.user.create({
             data: {
-                name: user.name,
-                nickName: user.nickName,
+                device: device,
+                name: name,
             },
         });
         return res.status(200).send(newUser);
@@ -25,15 +25,20 @@ exports.user.post("/", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-exports.user.put("/:name", async (req, res) => {
+exports.user.put("/:device_name", async (req, res) => {
     try {
-        const user = req.body;
+        const { device, name } = req.body;
+        const { device: oldDevice, name: oldName, } = JSON.parse(req.params.device_name);
         const newUser = await dbClient.user.update({
             where: {
-                name: req.params.name,
+                device_name: {
+                    device: oldDevice,
+                    name: oldName,
+                },
             },
             data: {
-                nickName: user.nickName,
+                device: device,
+                name: name,
             },
         });
         return res.status(200).send(newUser);
@@ -51,12 +56,15 @@ exports.user.get("/", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-exports.user.get("/:name", async (req, res) => {
+exports.user.get("/:device_name", async (req, res) => {
     try {
-        const name = req.params.name;
+        const { device, name } = JSON.parse(req.params.device_name);
         const user = await dbClient.user.findUnique({
             where: {
-                name: name,
+                device_name: {
+                    device,
+                    name,
+                },
             },
         });
         console.log(user);
@@ -66,11 +74,15 @@ exports.user.get("/:name", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-exports.user.delete("/:id", async (req, res) => {
+exports.user.delete("/:device_name", async (req, res) => {
+    const { device, name } = JSON.parse(req.params.device_name);
     try {
         await dbClient.user.delete({
             where: {
-                name: req.params.name,
+                device_name: {
+                    device,
+                    name,
+                },
             },
         });
         return res.status(200).send("success");
