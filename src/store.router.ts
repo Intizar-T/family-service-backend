@@ -17,6 +17,7 @@ interface CreateProduct {
   userDevice: string;
   userName: string;
   amount?: number;
+  unit?: string;
 }
 
 interface UpdateProduct {
@@ -25,6 +26,7 @@ interface UpdateProduct {
   boughtUserDevice?: string;
   isBought?: boolean;
   amount?: number;
+  unit?: string;
 }
 
 store.get("/", cors(), async (req: Request, res: Response) => {
@@ -55,13 +57,15 @@ store.get("/:id", async (req: Request, res: Response) => {
 
 store.post("/", async (req: Request, res: Response) => {
   try {
-    const { userDevice, userName, name, amount }: CreateProduct = req.body;
+    const { userDevice, userName, name, amount, unit }: CreateProduct =
+      req.body;
     const product = await dbClient.product.create({
       data: {
         name,
         userName,
         userDevice,
         amount,
+        unit,
       },
     });
     res.status(200).send(product);
@@ -78,6 +82,7 @@ store.put("/:id", async (req: Request, res: Response) => {
       name,
       amount,
       boughtUserDevice,
+      unit,
     }: UpdateProduct = req.body;
     const product = await dbClient.product.update({
       where: {
@@ -89,6 +94,7 @@ store.put("/:id", async (req: Request, res: Response) => {
         isBought,
         amount,
         boughtUserDevice,
+        unit,
       },
     });
     res.status(200).send(product);

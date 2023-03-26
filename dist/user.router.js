@@ -74,8 +74,8 @@ exports.user.get("/:device_name", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-exports.user.delete("/:device_name", async (req, res) => {
-    const { device, name } = JSON.parse(req.params.device_name);
+exports.user.delete("/", async (req, res) => {
+    const { device, name } = req.body;
     try {
         await dbClient.user.delete({
             where: {
@@ -85,7 +85,7 @@ exports.user.delete("/:device_name", async (req, res) => {
                 },
             },
         });
-        return res.status(200).send("success");
+        return res.status(200).send({ success: true });
     }
     catch (error) {
         res.status(500).send(error.message);
