@@ -13,8 +13,8 @@ interface User {
 }
 
 interface UpdateUser {
-  device?: string;
-  name?: string;
+  device: string;
+  newName: string;
 }
 
 user.post("/", async (req: Request, res: Response) => {
@@ -32,26 +32,23 @@ user.post("/", async (req: Request, res: Response) => {
   }
 });
 
-user.put("/:device_name", async (req: Request, res: Response) => {
+user.put("/:name", async (req: Request, res: Response) => {
   try {
-    const { device, name }: UpdateUser = req.body;
-    const {
-      device: oldDevice,
-      name: oldName,
-    }: { device: string; name: string } = JSON.parse(req.params.device_name);
+    const { newName, device }: UpdateUser = req.body;
+    const oldName = req.params.name;
     const newUser = await dbClient.user.update({
       where: {
         device_name: {
-          device: oldDevice,
+          device: device,
           name: oldName,
         },
       },
       data: {
         device: device,
-        name: name,
+        name: newName,
       },
     });
-    return res.status(200).send(newUser);
+    return res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).send(error.message);
   }
