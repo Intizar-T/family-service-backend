@@ -86,10 +86,8 @@ user.get("/:device_name", async (req: Request, res: Response) => {
   }
 });
 
-user.delete("/:device_name", async (req: Request, res: Response) => {
-  const { device, name }: { device: string; name: string } = JSON.parse(
-    req.params.device_name
-  );
+user.delete("/", async (req: Request, res: Response) => {
+  const { device, name }: User = req.body;
   try {
     await dbClient.user.delete({
       where: {
@@ -99,7 +97,7 @@ user.delete("/:device_name", async (req: Request, res: Response) => {
         },
       },
     });
-    return res.status(200).send("success");
+    return res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).send(error.message);
   }
