@@ -44,6 +44,12 @@ app.use(express_1.default.json());
 app.use("/store", store_router_1.store);
 app.use("/user", user_router_1.user);
 app.use("/echo", echo_router_1.echo);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((err, res) => {
+    res.status(500);
+    console.error(err);
+    res.send("Internal Server Error");
+});
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Listening to port ${PORT}`);
 });

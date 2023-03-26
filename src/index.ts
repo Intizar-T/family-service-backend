@@ -22,6 +22,12 @@ app.use(express.json());
 app.use("/store", store);
 app.use("/user", user);
 app.use("/echo", echo);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((err: any, res: any) => {
+  res.status(500);
+  console.error(err);
+  res.send("Internal Server Error");
+});
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Listening to port ${PORT}`);
