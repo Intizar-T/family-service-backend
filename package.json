@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "prisma": {
+    "seed": "npx ts-node prisma/seed.ts"
+  },
   "scripts": {
     "lint": "eslint . --ext .ts",
     "dev": "nodemon --config nodemon.json",
@@ -12,7 +15,8 @@
     "db:studio": "npx prisma studio",
     "build": "yarn && yarn db:reset --force && yarn db:generate && tsc --project ./",
     "db:generate": "npx prisma generate",
-    "db:reset": "npx prisma migrate reset"
+    "db:reset": "npx prisma migrate reset",
+    "db:seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",
