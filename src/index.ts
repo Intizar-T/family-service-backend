@@ -4,6 +4,7 @@ import cors from "cors";
 import { store } from "./store.router";
 import { user } from "./user.router";
 import { echo } from "./echo.router";
+import { initiateWebpush, push } from "./push.router";
 
 dotenv.config();
 
@@ -22,6 +23,10 @@ app.use(express.json());
 app.use("/store", store);
 app.use("/user", user);
 app.use("/echo", echo);
+app.use("/push", push);
+
+initiateWebpush();
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.use((err: any, res: any) => {
   res.status(500);
