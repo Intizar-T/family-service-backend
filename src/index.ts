@@ -13,6 +13,8 @@ if (!process.env.PORT) {
 }
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 8001;
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
 const app = express();
 
@@ -25,12 +27,13 @@ app.use("/user", user);
 app.use("/echo", echo);
 app.use("/push", push);
 
-initiateWebpush();
+initiateWebpush(publicVapidKey, privateVapidKey);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.use((err: any, res: any) => {
   res.status(500);
-  console.error(err);
+  // console.error(err);
+  console.log("Internal Server Error");
   res.send("Internal Server Error");
 });
 
