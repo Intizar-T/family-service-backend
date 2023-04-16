@@ -13,7 +13,7 @@
     "prod": "node dist/index.js",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
-    "build": "yarn && yarn db:reset --force && yarn db:generate && tsc --project ./",
+    "build": "yarn && tsc --project ./",
     "db:generate": "npx prisma generate",
     "db:reset": "npx prisma migrate reset",
     "db:seed": "npx prisma db seed"
@@ -35,13 +35,16 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.309.0",
     "@prisma/client": "4.11.0",
     "@types/uuid": "^9.0.1",
+    "@types/web-push": "^3.3.2",
     "@types/ws": "^8.5.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "uuid": "^9.0.0",
+    "web-push": "^3.5.0",
     "ws": "^8.13.0"
   },
   "engines": {
