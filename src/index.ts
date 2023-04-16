@@ -13,8 +13,9 @@ if (!process.env.PORT) {
 }
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 8001;
-const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
-const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
+const publicVapidKey =
+  "BLwFnMhO1kiK0tDNsj7N_ke7KvQKfNo1evw-CUOSEuho0wFEiPdCJd1AvIInEMuIsKoMr0gvxgLtpl60Zj6kdEE";
+const privateVapidKey = "Xf6mKZYbWZmJBFkdpkNE4-QsPdiEnglOJn39jUoYmjw";
 
 const app = express();
 
