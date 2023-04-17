@@ -1,10 +1,7 @@
 import express, { Request, Response } from "express";
 import webpush from "web-push";
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 
 export const push = express.Router();
-
-const db_client = new DynamoDBClient({ region: "ap-northeast-2" });
 
 export const initiateWebpush = (
   publicVapidKey: string,
@@ -47,20 +44,13 @@ type APIUsers = {
 push.post("/", async (req: Request, res: Response) => {
   const { userId, name, product }: PushParams = req.body;
   try {
-    // const command = new ScanCommand({
-    //   TableName: "intizar-scratch",
-    // });
-    // const users = (await db_client.send(command))["Items"];
     const usersData = await fetch(USER_LAMBDA_URL, {
       method: "GET",
     });
     const users: APIUsers[] = await usersData.json();
-    console.log(users);
     const subscriptions = users
       .filter(({ id, subscription }) => id["N"] !== userId && subscription?.S)
       .map(({ subscription }) => subscription.S);
-    console.log(subscriptions);
-    // const results = (
     await Promise.all(
       subscriptions.map(async (subscription) => {
         console.log(JSON.parse(subscription));
@@ -73,7 +63,6 @@ push.post("/", async (req: Request, res: Response) => {
         );
       })
     );
-    // ).filter((result) => result.statusCode);
     return res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).send(error.message);
