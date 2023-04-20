@@ -51,14 +51,17 @@ push.post("/", async (req: Request, res: Response) => {
     const subscriptions = users
       .filter(({ id, subscription }) => id["N"] !== userId && subscription?.S)
       .map(({ subscription }) => subscription.S);
+    let message = "";
+    if (product != null) message = `${name} sayta ${product} koshdy`;
+    else
+      message = `${name} hazyr magazina girjak bolotran. Garak zadynyzlary sayta yazynlar`;
     await Promise.all(
       subscriptions.map(async (subscription) => {
         console.log(JSON.parse(subscription));
         return await webpush.sendNotification(
           JSON.parse(subscription),
           JSON.stringify({
-            user: name,
-            product,
+            message,
           })
         );
       })
