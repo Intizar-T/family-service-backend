@@ -20,7 +20,8 @@ const USER_LAMBDA_URL =
 interface PushParams {
   userId: string;
   name: string;
-  product: string;
+  product?: string;
+  store?: string;
 }
 
 type APIUsers = {
@@ -42,7 +43,7 @@ type APIUsers = {
 };
 
 push.post("/", async (req: Request, res: Response) => {
-  const { userId, name, product }: PushParams = req.body;
+  const { userId, name, product, store }: PushParams = req.body;
   try {
     const usersData = await fetch(USER_LAMBDA_URL, {
       method: "GET",
@@ -53,8 +54,14 @@ push.post("/", async (req: Request, res: Response) => {
       .map(({ subscription }) => subscription.S);
     let message = "";
     if (product != null) message = `${name} sayta ${product} koshdy`;
-    else
-      message = `${name} hazyr magazina girjak bolotran. Garak zadynyzlary sayta yazynlar`;
+    else if (store != null) {
+      if (store === "other")
+        message = `${name} hazyr magazina girjak bolotran. Kaysy magazindigi belli amaz tolka`;
+      else
+        message = `${name} hazyr ${store} magazina girjak bolotran. Garak zadynyzlary sayta yazynlar`;
+    } else
+      message =
+        "Nime ucindir bosh uwedomleniya gitdi. Mundey bolmaly amazti, birzada yalnysh gitdi. Admin-a habar berinlar";
     await Promise.all(
       subscriptions.map(async (subscription) => {
         console.log(JSON.parse(subscription));
