@@ -62,7 +62,7 @@ push.post("/", async (req: Request, res: Response) => {
     } else
       message =
         "Nime ucindir bosh uwedomleniya gitdi. Mundey bolmaly amazti, birzada yalnysh gitdi. Admin-a habar berinlar";
-    const result = await Promise.all(
+    await Promise.all(
       subscriptions.map(async (subscription) => {
         return await webpush.sendNotification(
           JSON.parse(subscription),
@@ -72,7 +72,6 @@ push.post("/", async (req: Request, res: Response) => {
         );
       })
     );
-    console.log(result[0]);
     return res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).send(error.message);
