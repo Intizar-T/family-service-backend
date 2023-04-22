@@ -50,9 +50,7 @@ push.post("/", async (req: Request, res: Response) => {
     });
     const users: APIUsers[] = await usersData.json();
     const subscriptions = users
-      .filter(
-        ({ id, subscription }) => id["N"] === "1681669345" && subscription?.S
-      )
+      .filter(({ id, subscription }) => id["N"] !== userId && subscription?.S)
       .map(({ subscription }) => subscription.S);
     let message = "";
     if (product != null) message = `${name} sayta ${product} koshdy`;
