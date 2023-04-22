@@ -50,7 +50,9 @@ push.post("/", async (req: Request, res: Response) => {
     });
     const users: APIUsers[] = await usersData.json();
     const subscriptions = users
-      .filter(({ id, subscription }) => id["N"] !== userId && subscription?.S)
+      .filter(
+        ({ id, subscription }) => id["N"] === "1681669345" && subscription?.S
+      )
       .map(({ subscription }) => subscription.S);
     let message = "";
     if (product != null) message = `${name} sayta ${product} koshdy`;
@@ -62,9 +64,8 @@ push.post("/", async (req: Request, res: Response) => {
     } else
       message =
         "Nime ucindir bosh uwedomleniya gitdi. Mundey bolmaly amazti, birzada yalnysh gitdi. Admin-a habar berinlar";
-    await Promise.all(
+    const result = await Promise.all(
       subscriptions.map(async (subscription) => {
-        console.log(JSON.parse(subscription));
         return await webpush.sendNotification(
           JSON.parse(subscription),
           JSON.stringify({
@@ -73,6 +74,7 @@ push.post("/", async (req: Request, res: Response) => {
         );
       })
     );
+    console.log(result[0]);
     return res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).send(error.message);
