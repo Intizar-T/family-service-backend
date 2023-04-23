@@ -79,7 +79,7 @@ push.post("/", async (req: Request, res: Response) => {
     if (failMessage !== "Shulara uwedomleniya iwarip bolmady: ") {
       await webpush.sendNotification(
         JSON.parse(senderSub),
-        JSON.stringify({ failMessage })
+        JSON.stringify({ message: failMessage })
       );
     }
     return res.status(200).send({ success: true });
