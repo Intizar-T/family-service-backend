@@ -86,10 +86,11 @@ push.post("/", async (req: Request, res: Response) => {
       return res.status(200).send({ success: true });
     } else {
       console.log("vitamins");
-      const subscriptionsRecord = users.map(
-        ({ subscription }) => subscription?.S
-      );
+      const subscriptionsRecord = users
+        .filter(({ subscription }) => subscription?.S != null)
+        .map(({ subscription }) => subscription?.S);
       for (const subscription of subscriptionsRecord) {
+        console.log(subscription);
         const result: webpush.SendResult = await webpush.sendNotification(
           JSON.parse(subscription),
           JSON.stringify({
@@ -98,6 +99,7 @@ push.post("/", async (req: Request, res: Response) => {
         );
         console.log(result.statusCode);
       }
+      return res.status(200).send({ success: true });
     }
   } catch (error) {
     console.log(error);
