@@ -45,6 +45,7 @@ const DEFAULT_FAIL_MESSAGE = "Shulara uwedomleniya iwarip bolmady: ";
 
 push.post("/", async (req: Request, res: Response) => {
   const { userId, message, vitamins }: PushParams = req.body;
+  console.log(req.body);
   try {
     const usersData = await fetch(USER_LAMBDA_URL, {
       method: "GET",
