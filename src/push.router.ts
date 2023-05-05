@@ -45,7 +45,6 @@ const DEFAULT_FAIL_MESSAGE = "Shulara uwedomleniya iwarip bolmady: ";
 
 push.post("/", async (req: Request, res: Response) => {
   const { userId, message, vitamins }: PushParams = req.body;
-  console.log(req.body);
   try {
     const usersData = await fetch(USER_LAMBDA_URL, {
       method: "GET",
@@ -73,7 +72,6 @@ push.post("/", async (req: Request, res: Response) => {
             message,
           })
         );
-        console.log(result.statusCode);
         if (result.statusCode === 410) {
           failMessage += `${name}`;
         }
@@ -86,12 +84,10 @@ push.post("/", async (req: Request, res: Response) => {
       }
       return res.status(200).send({ success: true });
     } else {
-      console.log("vitamins");
       const subscriptionsRecord = users
         .filter(({ subscription }) => subscription?.S != null)
         .map(({ subscription }) => subscription?.S);
       for (const subscription of subscriptionsRecord) {
-        console.log(subscription);
         const result: webpush.SendResult = await webpush.sendNotification(
           JSON.parse(subscription),
           JSON.stringify({
