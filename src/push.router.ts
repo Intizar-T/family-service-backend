@@ -44,6 +44,7 @@ type APIUsers = {
 const DEFAULT_FAIL_MESSAGE = "Shulara uwedomleniya iwarip bolmady: ";
 
 push.post("/", async (req: Request, res: Response) => {
+  console.log(req.body);
   const { userId, message, vitamins }: PushParams = req.body;
   try {
     const usersData = await fetch(USER_LAMBDA_URL, {
