@@ -73,6 +73,7 @@ push.post("/", async (req: Request, res: Response) => {
             message,
           })
         );
+        console.log(result.statusCode);
         if (result.statusCode === 410) {
           failMessage += `${name}`;
         }
