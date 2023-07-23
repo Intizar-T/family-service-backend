@@ -13,9 +13,10 @@ export const initiateWebpush = (
     privateVapidKey
   );
 };
-
-const USER_LAMBDA_URL =
-  "https://z7x9jyq1mj.execute-api.ap-northeast-2.amazonaws.com/dev/user";
+const BASE_URL =
+  "https://z7x9jyq1mj.execute-api.ap-northeast-2.amazonaws.com/dev";
+const USER_LAMBDA_URL = `${BASE_URL}/user`;
+const SUBSCRIPTION_LAMBDA_URL = `${BASE_URL}/subscription`;
 
 interface PushParams {
   userId?: string;
@@ -86,17 +87,24 @@ push.post("/", async (req: Request, res: Response) => {
       }
       return res.status(200).send({ success: true });
     } else {
-      const subscriptionsRecord = users
-        .filter(({ subscription }) => subscription?.S != null)
-        .map(({ subscription }) => subscription?.S);
-      for (const subscription of subscriptionsRecord) {
-        const result: webpush.SendResult = await webpush.sendNotification(
-          JSON.parse(subscription),
-          JSON.stringify({
-            message,
-          })
-        );
-        console.log(result.statusCode);
+      for (const { name, subscription, id } of users) {
+        try {
+          if (subscription?.S == null) continue;
+          await webpush.sendNotification(
+            JSON.parse(subscription.S),
+            JSON.stringify({
+              message,
+            })
+          );
+        } catch (error) {
+          console.log(`${name.S}'s subscription has expired and was deleted`);
+          await fetch(SUBSCRIPTION_LAMBDA_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              id: id.N,
+            }),
+          });
+        }
       }
       return res.status(200).send({ success: true });
     }
